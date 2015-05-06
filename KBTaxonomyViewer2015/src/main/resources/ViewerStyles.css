@@ -1,0 +1,66 @@
+/* 
+    Created on : Nov 26, 2014, 11:53:52 AM
+    Author     : Michael Witbrock <witbrock@cyc.com>
+*/
+
+svg {
+  border: solid 1px #ddd;
+  border-radius: 3px;
+}
+
+.node circle {  fill: #fff;  stroke: steelblue;  stroke-width: 1.5px;}.node {  font: 12px sans-serif;}.link {  fill: none;  stroke: #ccc;  stroke-width: 1.5px;}#concepts {  font: 14px sans-serif;}.addedTerm {
+  font-weight: 16px sans-serif;
+  color: green;
+}
+.selectedTerm {
+  font-weight: bold;
+}
+
+.cgraph {
+}
+
+h2 { font: 18px sans-serif;}
+
+a {
+  text-decoration: inherit;
+  font-style: inherit;
+  color: inherit;
+}
+.unclickable {color: gray;}a:link, a:visited {
+  border:none;
+  font-style:normal;
+  color:black;
+}
+a:hover {
+  text-decoration: none;
+  color: #a3211f;
+}
+
+.expandible.node circle {
+  fill: #AB90D2
+}
+
+.conceptDetailView {}
+
+.conceptDetailHtml {
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0px;
+}
+
+.conceptDetailContent {
+  width:100%;
+  height: 500px;
+  max-height: 500px;
+  background-color: #fff;
+  border: solid 1px #eee;
+  border-radius: 3px;
+  margin:0;
+  padding:4px;
+  overflow:auto;
+}
+
+form {
+    display: inline-block; //Or display: inline; 
+}

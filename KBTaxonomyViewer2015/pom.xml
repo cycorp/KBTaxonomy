@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.cyc.project.kbtaxonomy</groupId>
+  <artifactId>KBTaxonomyViewer2015</artifactId>
+  <packaging>jar</packaging>
+    
+  <parent>
+    <groupId>com.cyc.project.kbtaxonomy</groupId>
+    <artifactId>KBTaxonomyParent</artifactId>
+    <version>1.0</version>
+    <relativePath>../KBTaxonomyParent</relativePath>
+  </parent>
+    
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+  <name>KBTaxonomyViewer2015</name>
+    
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.3</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+    
+  <dependencies>
+    
+    <dependency>
+      <groupId>com.cyc.tool</groupId>
+      <artifactId>OwlTools</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>net.sourceforge.owlapi</groupId>
+      <artifactId>owlapi-distribution</artifactId>
+      <version>4.0.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    
+    <!--  Gson: Java to Json conversion -->
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+    </dependency>
+    
+    <!-- Utility .... Apache Commons-->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-cli</groupId>
+      <artifactId>commons-cli</artifactId>
+    </dependency>
+            
+    <!-- NLP -->
+    <dependency>
+      <groupId>org.apache.opennlp</groupId>
+      <artifactId>opennlp-tools</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>fi.iki.elonen</groupId>
+      <artifactId>nanohttpd</artifactId>
+      <version>2.1.0</version>
+      <type>jar</type>
+    </dependency>
+ 
+    <dependency>
+      <groupId>fi.iki.elonen</groupId>
+      <artifactId>nanohttpd-webserver</artifactId>
+      <version>2.1.0</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>com.cyc.project.kbtaxonomy</groupId>
+      <artifactId>KBTaxonomyGeneral</artifactId>
+      <version>1.0</version>
+      <type>jar</type>
+    </dependency>
+    
+    <!-- Data MAPDB-->
+    <dependency>
+      <groupId>org.mapdb</groupId>
+      <artifactId>mapdb</artifactId>
+      <version>1.0.6</version>
+    </dependency>
+    <dependency>
+      <groupId>com.cyc.tool</groupId>
+      <artifactId>ConceptFinder</artifactId>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>com.cyc.tool</groupId>
+      <artifactId>DistributedRepresentations</artifactId>
+      <type>jar</type>
+    </dependency>
+  </dependencies>
+</project>
