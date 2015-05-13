@@ -40,7 +40,7 @@ public class NonCycConcept extends KBConcept {
    * Map from Integer to NonCycConcept to track teamIDs
    */
   static protected final Map<Integer, NonCycConcept> teamIDsToConcepts = new HashMap<>();
-  String nonCycConceptWNIDs;
+  List<String> nonCycConceptWNIDs;
   int nonCycTeamNumericID;
 
   Float weight = null;
@@ -54,10 +54,10 @@ public class NonCycConcept extends KBConcept {
    * @param conceptUri
    * @param nonCycConceptWNIDs
    */
-  public NonCycConcept(String conceptCycL, int nonCycTeamConceptID, String conceptName, String conceptUri, String nonCycConceptWNIDs) {
+  public NonCycConcept(String conceptCycL, int nonCycTeamConceptID, String conceptName, String conceptUri, List<String> nonCycConceptWNIDs) {
     super(conceptCycL, conceptUri);
     nonCycTeamNumericID = nonCycTeamConceptID;
-    nonCycConceptWNIDs = nonCycConceptWNIDs;
+    this.nonCycConceptWNIDs = nonCycConceptWNIDs;
     this.nlNames = new HashSet<>();
     this.nlNames.add(conceptName);
     setExpanded();
@@ -74,7 +74,7 @@ public class NonCycConcept extends KBConcept {
    * @param nonCycConceptWNIDs
    * @return a NonCycConcept
    */
-  public static NonCycConcept create(String kbTaxonomyCycConceptTerm, int nonCycTeamConceptID, String conceptName, String conceptUri, String nonCycConceptWNIDs) {
+  public static NonCycConcept create(String kbTaxonomyCycConceptTerm, int nonCycTeamConceptID, String conceptName, String conceptUri, List<String> nonCycConceptWNIDs) {
     
     if (haveConcept(kbTaxonomyCycConceptTerm)) {
       return (NonCycConcept) getConcept(kbTaxonomyCycConceptTerm);
@@ -104,7 +104,7 @@ public class NonCycConcept extends KBConcept {
     }
     assert (kbTaxonomyCycConceptTerm.startsWith("NonCycConcept")) :
             "Attempt to create NonCyc Concept for non-NonCyc term " + kbTaxonomyCycConceptTerm;
-    NonCycConcept created = new NonCycConcept(kbTaxonomyCycConceptTerm, nonCycTeamConceptID, conceptName, conceptUri, "");
+    NonCycConcept created = new NonCycConcept(kbTaxonomyCycConceptTerm, nonCycTeamConceptID, conceptName, conceptUri, new ArrayList<>());
 
     addToLists(created);
     teamIDsToConcepts.put(nonCycTeamConceptID, created);
@@ -167,7 +167,6 @@ public class NonCycConcept extends KBConcept {
     String html = "";
     String constantName = getName();
     Set<String> pics = selectPicsForConcept(getNonCycConceptWNIDs());
-    Set<String> picURLs = new HashSet<>();
     html += "<h1>" + constantName + "</h1>\n\n";
     
     for (String p : pics) {
@@ -194,7 +193,7 @@ public class NonCycConcept extends KBConcept {
    *
    * @return nonCycConceptWNIDs
    */
-  public String getNonCycConceptWNIDs() {
+  public List<String> getNonCycConceptWNIDs() {
     return nonCycConceptWNIDs;
   }
 
@@ -289,6 +288,12 @@ public class NonCycConcept extends KBConcept {
     fields.add(JSONBuilder.fieldStringValuePair("type", "nonCycTeamConcept"));
     fields.add(JSONBuilder.fieldValuePair("activeconcept", this.isSelected()));
     fields.add(JSONBuilder.fieldStringValuePair("displayedConceptID", getRef()));
+    fields.add(JSONBuilder.fieldStringValuePair("nonCycTeamConceptID", Integer.toString(getNonCycTeamNumericID())));
+//    fields.add(JSONBuilder.fieldValuePair("nonCycConceptWNID", JSONBuilder.arrayOfString(getNonCycConceptWNIDs())));
+    if (nonCycConceptWNIDs != null) {
+      fields.add(JSONBuilder.fieldValuePair("nonCycConceptWNID", JSONBuilder.arrayOfString(nonCycConceptWNIDs)));
+    }
+    
     
     return JSONBuilder.object(fields);
   }
@@ -310,9 +315,10 @@ public class NonCycConcept extends KBConcept {
     if (nonCycTeamNumericID >= 0) {
       fields.add(JSONBuilder.fieldValuePair("nonCycTeamConceptID", nonCycTeamNumericID));
     }
-    if (!nonCycConceptWNIDs.isEmpty()) {
-      fields.add(JSONBuilder.fieldValuePair("nonCycConceptWNID", nonCycConceptWNIDs.toString()));
+    if (nonCycConceptWNIDs != null) {
+      fields.add(JSONBuilder.fieldValuePair("nonCycConceptWNID", JSONBuilder.arrayOfString(nonCycConceptWNIDs)));
     }
+//    fields.add(JSONBuilder.fieldValuePair("nonCycConceptWNID", JSONBuilder.arrayOfString(getNonCycConceptWNIDs())));
     fields.add(JSONBuilder.fieldStringValuePair("kbTaxonomyCycConceptTerm", getConceptCycL()));
 
     if (getNlNames().size() == 1) {
@@ -383,11 +389,10 @@ public class NonCycConcept extends KBConcept {
     }
   }
 
-  private Set<String> selectPicsForConcept(String nonCycConceptWNIDs) {
+  private Set<String> selectPicsForConcept(List<String> nonCycConceptWNIDs) {
     Set<String> picUrls = new HashSet<>();
     
-    String[] wnids = nonCycConceptWNIDs.split(",");
-    for (String w : wnids) {
+    for (String w : nonCycConceptWNIDs) {
       picUrls.add("http://www.image-net.org/api/text/imagenet.synset.geturls?wnid=" + w);
     }
 
@@ -400,6 +405,11 @@ public class NonCycConcept extends KBConcept {
     fields.add(JSONBuilder.fieldStringValuePair("type", "nonCycTeamConcept"));
     fields.add(JSONBuilder.fieldValuePair("activeconcept", this.isSelected()));
     fields.add(JSONBuilder.fieldStringValuePair("displayedConceptID", getRef()));
+    fields.add(JSONBuilder.fieldStringValuePair("nonCycTeamConceptID", Integer.toString(getNonCycTeamNumericID())));
+//    fields.add(JSONBuilder.fieldValuePair("nonCycConceptWNID", JSONBuilder.arrayOfString(getNonCycConceptWNIDs())));
+    if (nonCycConceptWNIDs != null) {
+      fields.add(JSONBuilder.fieldValuePair("nonCycConceptWNID", JSONBuilder.arrayOfString(nonCycConceptWNIDs)));
+    }
     //if (nonCycTeamNumericID >=0 ){
     //   fields.add(JSONBuilder.fieldValuePair("nonCycTeamConceptID", nonCycTeamNumericID));
     // }
@@ -422,6 +432,11 @@ public class NonCycConcept extends KBConcept {
     fields.add(JSONBuilder.fieldValuePair("activeconcept", this.isSelected()));
     fields.add(JSONBuilder.fieldValuePair("isParent", true));
     fields.add(JSONBuilder.fieldStringValuePair("displayedConceptID", getRef()));
+    fields.add(JSONBuilder.fieldStringValuePair("nonCycTeamConceptID", Integer.toString(getNonCycTeamNumericID())));
+//    fields.add(JSONBuilder.fieldValuePair("nonCycConceptWNID", JSONBuilder.arrayOfString(getNonCycConceptWNIDs())));
+    if (nonCycConceptWNIDs != null) {
+      fields.add(JSONBuilder.fieldValuePair("nonCycConceptWNID", JSONBuilder.arrayOfString(nonCycConceptWNIDs)));
+    }
     //if (nonCycTeamNumericID >=0 ){
     //   fields.add(JSONBuilder.fieldValuePair("nonCycTeamConceptID", nonCycTeamNumericID));
     // }

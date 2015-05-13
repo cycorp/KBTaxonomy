@@ -293,7 +293,13 @@ public class TaxonomyFromJson implements Taxonomy {
       String nonCycName = jmap.get("nonCycConceptName").toString();
       assert (jmap.containsKey("nonCycTeamConceptID")) : "Found NonCyc Concept with no numeric ID " + cycConceptTerm;
       int nonCycID = (int) Math.round((Double) jmap.get("nonCycTeamConceptID"));
-      thisConcept = NonCycConcept.create(cycConceptTerm, nonCycID, nonCycName, conceptUri);
+      try {
+        List<String> nonCycWNIDs = (List<String>) jmap.get("NonCycConceptWNID");
+//      String nonCycWNIDs = jmap.get("NonCycConceptWNID").toString().replaceAll("\\[", "").replaceAll("\\]", "");
+      thisConcept = NonCycConcept.create(cycConceptTerm, nonCycID, nonCycName, conceptUri, nonCycWNIDs);
+      } catch (Exception e) {
+        System.out.println("No wnid info for conept: " + nonCycName + "/" + nonCycID); 
+      }
       assert (!jmap.containsKey("specializations")) : "NonCyc Concepts shouldn't have specialisations";
       return thisConcept;
     }
