@@ -44,3 +44,12 @@ function gatherSelectedIDs() {
   window.location.search = collectorSpace;
   console.log(window.location);
 }
+
+function clearLists() {
+ var collectorSpace = '?clearLists=true';
+   collectorSpace = collectorSpace.slice(0, -1);
+//   + "  var currLoc=window.location;
+  console.log(collectorSpace);
+  window.location.search = collectorSpace;
+  console.log(window.location);
+}
