@@ -70,6 +70,14 @@ public class JavascriptGraphs {
     //there is a argument for this method going in the jscript class
     return "<button onclick='gatherSelectedIDs();'>SAVE</button>";
   }
+  
+  /**
+   *
+   * @return html for the viewer
+   */
+  public static String clearButton() {
+   return "<button onclick='clearLists();'>RESET</button>"; 
+  }
 
   /**
    *
