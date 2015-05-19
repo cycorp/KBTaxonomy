@@ -19,7 +19,6 @@ package com.cyc.tool.kbtaxonomy.viewer;
  * limitations under the License.
  * #L%
  */
-
 import com.cyc.tool.kbtaxonomy.builder.NonCycConcept;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,6 +28,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -59,7 +59,7 @@ public class FeatureSet {
 
   /**
    * FeatureSet constructor
-   * 
+   *
    * @param xmlFromFile
    */
   public FeatureSet(File xmlFromFile) {
@@ -80,10 +80,10 @@ public class FeatureSet {
               getElementsByTagName("node")
               .item(0)
               .getAttributes();
-      
+
       String weightMap = nodeAttribs.getNamedItem("eq")
               .getNodeValue().replaceFirst("\\s*combine\\s+", "");
-      
+
       NodeList nListOld = docOld.getElementsByTagName("tag");
 
       for (int i = 0; i < nListOld.getLength(); i++) {
@@ -101,7 +101,7 @@ public class FeatureSet {
       });
       /* Export Weights */
       map.values().forEach(feat -> {
-        
+
         feat.getConcept().setWeight(feat.getWeight());
       });
 
@@ -112,17 +112,18 @@ public class FeatureSet {
 
   /**
    * Construct FeatureSet from a set of NonCyc concepts
-   * 
+   *
    * @param concepts
    * @param setN
    */
-  
   public FeatureSet(Collection<NonCycConcept> concepts, String setN) {
     map.clear();
     features.clear();
     setName = setN;
     concepts.forEach(con -> {
-      features.add(new Feature(con));
+      for (Integer id : con.getNonCycTeamNumericID()) {
+        features.add(new Feature(con, id));
+      }
     });
   }
 
@@ -141,13 +142,13 @@ public class FeatureSet {
   public Set<NonCycConcept> getSet() {
     return features.stream()
             .map(Feature::getConcept)
-        // .sorted()
+            // .sorted()
             .collect(Collectors.toSet());
   }
 
   /**
    * Save out a FeatureSet to a file
-   * 
+   *
    * @param file
    */
   public void save(File file) {
@@ -169,10 +170,10 @@ public class FeatureSet {
             + features.stream().map(Feature::toString).sorted().collect(Collectors.joining(", "))
             + "]");
   }
-  
+
   /**
    * Get String representation of the feature set without weights
-   * 
+   *
    * @return a String
    */
   public String toStringNoWeight() {
@@ -183,10 +184,10 @@ public class FeatureSet {
             + features.stream().map(Feature::toStringNoWeight).sorted().collect(Collectors.joining(", "))
             + "]");
   }
-  
+
   /**
    * Get XML representation of the feature set
-   * 
+   *
    * @return a String
    */
   public String toXML() {
@@ -197,27 +198,28 @@ public class FeatureSet {
   }
 
   private String combineXML() {
-    return "combine " 
+    return "combine "
             + features.stream().sorted()
-                    .map(Feature::toWeightXML)
-                    .collect(Collectors.joining(","));
+            .map(Feature::toWeightXML)
+            .collect(Collectors.joining(","));
   }
-  
+
   private String nodeXML(String indent) {
-    return indent+"<node eq=\"" + combineXML() + "\" id=\"CC\" name=\"concepts/cycorp\">\n"
-            + tagsXML(indent+" ") + "\n"
-            + indent+"</node>\n";
+    return indent + "<node eq=\"" + combineXML() + "\" id=\"CC\" name=\"concepts/cycorp\">\n"
+            + tagsXML(indent + " ") + "\n"
+            + indent + "</node>\n";
   }
 
   private String tagsXML(String indent) {
-    return features.stream().sorted().map(f->f.toTagXML(indent+" ")).collect(Collectors.joining("\n"));
+    return features.stream().sorted().map(f -> f.toTagXML(indent + " ")).collect(Collectors.joining("\n"));
 
   }
+
   synchronized int nextFeatureNum() {
     lastFeatureNum++;
     return lastFeatureNum;
   }
-  
+
   private class Feature implements Comparable<Feature> {
 
     String name;
@@ -226,10 +228,10 @@ public class FeatureSet {
     String conceptUri;
     Float weight;
     static final String matcher = "^([^/]*)/(\\d+)$";
-    
+
     public Feature(String fromSingle, String tagId) {
       if (fromSingle.matches(matcher)) {
-        
+
         name = fromSingle.replaceFirst(matcher, "$1");
         String num = fromSingle.replaceFirst(matcher, "$2");
         nonCycTeamIDNumber = Integer.parseInt(num);
@@ -238,43 +240,43 @@ public class FeatureSet {
         map.put(tagID, this);
       }
     }
-    
-    public Feature(NonCycConcept c) {
+
+    public Feature(NonCycConcept c, Integer id) {
       name = c.getName();
-      nonCycTeamIDNumber = c.getNonCycTeamNumericID();
+      nonCycTeamIDNumber = id;
       conceptUri = "";
       tagID = String.format("CC.%d", nextFeatureNum());
       weight = c.getWeight();
       map.put(tagID, this);
     }
-    
+
     public Float getWeight() {
       return weight;
     }
-    
+
     public String getName() {
       return name;
     }
-    
+
     public NonCycConcept getConcept() {
       return NonCycConcept.getFromIDNameOpt(nonCycTeamIDNumber, name, conceptUri);
     }
-    
+
     String toWeightXML() {
       return tagID + "=" + weight;
     }
-    
+
     String toNameWithTeamID() {
       return name + ":" + nonCycTeamIDNumber;
     }
-    
+
     String toTagXML(String indent) {
-      return indent+"<tag id=\"" + tagID + "\" name=\"" + toNameWithTeamID() + "\"/>";
+      return indent + "<tag id=\"" + tagID + "\" name=\"" + toNameWithTeamID() + "\"/>";
     }
-    
+
     @Override
     public String toString() {
-      return toStringNoWeight()+"/W:" + toWeightXML();
+      return toStringNoWeight() + "/W:" + toWeightXML();
     }
 
     public String toStringNoWeight() {
