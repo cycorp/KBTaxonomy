@@ -119,12 +119,22 @@ public class OpenCycViewer implements ConceptViewer {
   }
 
   @Override
+  public String getFileN() {
+    throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
   public InvertedIndex getIndex() {
     return oCycIndex;
   }
 
   @Override
   public Set<NonCycConcept> getLastFileConcepts() {
+    throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public String getLastSaveF() {
     throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
   }
 

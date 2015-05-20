@@ -78,6 +78,14 @@ public class JavascriptGraphs {
   public static String clearButton() {
    return "<button onclick='clearLists();'>RESET</button>"; 
   }
+  
+  /**
+   *
+   * @return html for the viewer
+   */
+  public static String xmlButton() {
+    return "<button onclick='xmlQuery();'>GET XML QUERY</button>";
+  }
 
   /**
    *

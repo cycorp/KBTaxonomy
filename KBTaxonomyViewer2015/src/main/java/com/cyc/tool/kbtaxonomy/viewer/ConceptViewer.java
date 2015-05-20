@@ -80,6 +80,16 @@ public interface ConceptViewer {
    * @return lastFileConcepts
    */
   public Set<NonCycConcept> getLastFileConcepts();
+
+  /**
+   * @return  lastSaveF
+   */
+  public String getLastSaveF();
+  
+  /**
+   * @return fileN
+   */
+  public String getFileN();
   
   /**
    *
