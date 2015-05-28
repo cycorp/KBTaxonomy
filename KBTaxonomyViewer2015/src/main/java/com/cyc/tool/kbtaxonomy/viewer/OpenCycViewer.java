@@ -277,6 +277,11 @@ public class OpenCycViewer implements ConceptViewer {
     }
     
   }
+
+  @Override
+  public Set<NonCycConcept> prepareNonCycConceptsFromNearOpenCycTerms(Collection<KBConcept> nearestOCyc) {
+    throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
+  }
   
   @Override
   public void setUpSpaceIfNeeded() throws IOException, OWLOntologyCreationException {
