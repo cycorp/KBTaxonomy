@@ -53,3 +53,12 @@ function clearLists() {
   window.location.search = collectorSpace;
   console.log(window.location);
 }
+
+function xmlQuery() {
+ var collectorSpace = '?xmlQuery=true'; 
+    collectorSpace = collectorSpace.slice(0, -1);
+//   + "  var currLoc=window.location;
+  console.log(collectorSpace);
+  window.location.search = collectorSpace;
+  console.log(window.location);
+}

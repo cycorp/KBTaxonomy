@@ -46,7 +46,9 @@ public class JavascriptGraphs {
   private static List<String> graphTypes = new ArrayList<>();
   private final static Map<String, String> javaScripts = new LinkedHashMap<>();
   private static final List<String> jsLibURIs = Arrays.asList(
-          "http://d3js.org/d3.v3.min.js",
+//          "http://d3js.org/d3.v3.min.js",
+//          "https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js",
+          getResourceURI("d3.min.js"),
           getResourceURI("ConceptDetailViewer.js")
   );
 
@@ -77,6 +79,14 @@ public class JavascriptGraphs {
    */
   public static String clearButton() {
    return "<button onclick='clearLists();'>RESET</button>"; 
+  }
+  
+  /**
+   *
+   * @return html for the viewer
+   */
+  public static String xmlButton() {
+    return "<button onclick='xmlQuery();'>GET XML QUERY</button>";
   }
 
   /**

@@ -80,6 +80,16 @@ public interface ConceptViewer {
    * @return lastFileConcepts
    */
   public Set<NonCycConcept> getLastFileConcepts();
+
+  /**
+   * @return  lastSaveF
+   */
+  public String getLastSaveF();
+  
+  /**
+   * @return fileN
+   */
+  public String getFileN();
   
   /**
    *
@@ -184,6 +194,8 @@ public interface ConceptViewer {
    *
    */
   public void prepareNearOpenCycTerms();
+
+  public Set<NonCycConcept> prepareNonCycConceptsFromNearOpenCycTerms(Collection<KBConcept> nearestOCyc);
 
   /**
    * Check if W2V space needs to be created and create it if needed
