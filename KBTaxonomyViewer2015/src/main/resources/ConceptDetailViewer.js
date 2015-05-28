@@ -6,7 +6,7 @@ var conceptDetailComponentCssClass = "conceptDetailComponent";
 
 
 function NodeDetail(viewer, selection) {
-  var detail=this;
+  var detail = this;
   var contentDisplayTimer;
   var displayTransitionDuration = 1000;
   var contentDisplayTimer;
@@ -20,52 +20,76 @@ function NodeDetail(viewer, selection) {
     return viewer.svg.select("." + examinedConceptCssClass);
   }
 
-  this.cancel = function() {
+  this.cancel = function () {
     if (contentDisplayTimer) {
       clearTimeout(contentDisplayTimer);
     }
     contentDisplayTimer = null;
   };
-  
-  var updateDisplay=function(selection) {
+
+  var updateDisplay = function (selection) {
     selection
-            .attr("width", function(d) { return d.width; })
-            .attr("height", function(d) { return d.height; })
-            .attr("x", function(d) { return d.cx - (d.width/2); })
-            .attr("y", function(d) { return d.cy - (d.height/2); })
-            .attr('rx', function(d) { return d.rx; })
-            .attr('ry', function(d) { return d.ry; })
-            .style('fill', function(d) { return d.fill; })
-            .style('stroke', function(d) { return d.stroke; });
+            .attr("width", function (d) {
+              return d.width;
+            })
+            .attr("height", function (d) {
+              return d.height;
+            })
+            .attr("x", function (d) {
+              return d.cx - (d.width / 2);
+            })
+            .attr("y", function (d) {
+              return d.cy - (d.height / 2);
+            })
+            .attr('rx', function (d) {
+              return d.rx;
+            })
+            .attr('ry', function (d) {
+              return d.ry;
+            })
+            .style('fill', function (d) {
+              return d.fill;
+            })
+            .style('stroke', function (d) {
+              return d.stroke;
+            });
   };
-  
-  var showContent = function(parent, d) {
+
+  var showContent = function (parent, d) {
     //console.log("d",d);
     var foreignObjects = parent.append("foreignObject")
             .datum(d)
             .classed(conceptDetailHtmlCssClass, true)
             .classed(conceptDetailComponentCssClass, true)
-            .attr("width", function(d) { return d.width; })
-            .attr("height", function(d) { return d.height; })
-            .attr("x", function(d) { return d.x; })
-            .attr("y", function(d) { return d.y; });
+            .attr("width", function (d) {
+              return d.width;
+            })
+            .attr("height", function (d) {
+              return d.height;
+            })
+            .attr("x", function (d) {
+              return d.x;
+            })
+            .attr("y", function (d) {
+              return d.y;
+            });
     var html = foreignObjects.append("xhtml:body");
     var htmlContent = html.append("p")
             .classed(conceptDetailContentCssClass, true)
             .classed(conceptDetailComponentCssClass, true)
-            .html(function(d, i) {
+            .html(function (d, i) {
               return d.content;
             });
   };
-  
-  this.show = function() {
+
+  this.show = function () {
     this.cancel();
-    var originCircle=selectSymbol(selection);
-    originCircle.datum().focalSize=150;
+    var originCircle = selectSymbol(selection);
+    originCircle.datum().focalSize = 150;
     displayg = viewer.svg.append("g")
             .attr("transform", selection.attr("transform"))
             .classed(conceptDetailViewCssClass, true);
-    
+
     var d = {};
     d.minWidth = parseFloat(originCircle.attr("r") * 2);
     d.minHeight = d.minWidth;
@@ -75,19 +99,19 @@ function NodeDetail(viewer, selection) {
     d.cy = originCircle.attr('cy') + 0;
     d.detailWidth = 520;
     d.detailHeight = 520;
-    d.xOffset=d.detailWidth;
-    d.yOffset=0;
+    d.xOffset = d.detailWidth;
+    d.yOffset = 0;
     d.rx = d.width / 2;
     d.ry = d.height / 2;
     d.origFill = originCircle.style('fill');
     d.origStroke = originCircle.style('stroke');
     d.fill = d.origFill;
     d.stroke = d.origStroke;
-    
+
     var shape = displayg.append("rect")
             .datum(d)
             .call(updateDisplay)
-            .on('contextmenu', function(d) {
+            .on('contextmenu', function (d) {
               d3.event.preventDefault();
               detail.hide();
             });
@@ -101,31 +125,41 @@ function NodeDetail(viewer, selection) {
             .transition()
             .duration(displayTransitionDuration)
             .call(updateDisplay);
-    
-    contentDisplayTimer = setTimeout(function() {
+
+    contentDisplayTimer = setTimeout(function () {
       var closeButton = displayg.append("circle")
               .datum(d)
-              .attr("r", function(d) { return 5; })
-              .attr("cx", function(d) { return d.cx + (d.width / 2) - 15; })
-              .attr("cy", function(d) { return d.cy - (d.height / 2); })
-              .style('fill', function(d) { return d.fill; })
-              .style('stroke', function(d) { return d.stroke; })
+              .attr("r", function (d) {
+                return 5;
+              })
+              .attr("cx", function (d) {
+                return d.cx + (d.width / 2) - 15;
+              })
+              .attr("cy", function (d) {
+                return d.cy - (d.height / 2);
+              })
+              .style('fill', function (d) {
+                return d.fill;
+              })
+              .style('stroke', function (d) {
+                return d.stroke;
+              })
               .classed(conceptDetailComponentCssClass, true)
-              .on('mouseover', function(d) {
+              .on('mouseover', function (d) {
                 d3.select(this).style("fill", "red");
               })
-              .on('mouseout', function(d) {
+              .on('mouseout', function (d) {
                 d3.select(this).style("fill", d.fill);
               })
-              .on('click', function(d) {
+              .on('click', function (d) {
                 d3.event.preventDefault();
                 detail.hide();
               })
-              .on('contextmenu', function(d) {
+              .on('contextmenu', function (d) {
                 d3.event.preventDefault();
                 detail.hide();
               });
-      
+
       var t = {};
       t.name = selection.datum().name;
       t.id = selection.datum().hlid || selection.datum().nonCycTeamConceptID;
@@ -135,8 +169,8 @@ function NodeDetail(viewer, selection) {
       t.y = parseInt(shape.attr("y")) + 10;
       //t.x = d.cx - (d.width / 2);
       //t.y = d.cy - (d.height / 2);
-      
-      d3.xhr("?getNodeData=" + t.id, function(err, data) {
+
+      d3.xhr("?getNodeData=" + t.id, function (err, data) {
         if (err) {
           return console.warn(err);
         }
@@ -146,7 +180,7 @@ function NodeDetail(viewer, selection) {
     }, displayTransitionDuration);
   };
 
-  this.hide = function() {
+  this.hide = function () {
     this.cancel();
     if (displayg) {
       viewer.svg.selectAll("." + conceptDetailComponentCssClass).remove(); // FIXME: should only remove child of selection
@@ -166,7 +200,7 @@ function NodeDetail(viewer, selection) {
               .duration(displayTransitionDuration)
               .call(updateDisplay);
 
-      setTimeout(function() {
+      setTimeout(function () {
         displayg.remove();
         displayg = null;
         selectExamined()
@@ -189,7 +223,7 @@ function NodeDetail(viewer, selection) {
     }
   };
 
-  this.abort = function() {
+  this.abort = function () {
     this.cancel();
     this.hide();
   };
@@ -205,7 +239,7 @@ function ConceptDetailViewer(svg) {
   this.svg = svg;
   var contentDisplay;
 
-  this.cancelShowDetail = function() {
+  this.cancelShowDetail = function () {
     if (contentDisplay) {
       contentDisplay.abort();
     }
@@ -224,27 +258,27 @@ function ConceptDetailViewer(svg) {
   }
 
   function selectUnexamined() {
-    return viewer.svg.selectAll(".node").filter(function(d, i) {
+    return viewer.svg.selectAll(".node").filter(function (d, i) {
       return !isExamined(d3.select(this));
     });
   }
   /*
-  function resetOffsets(d) {
-    d.xFocalOffset = 0;
-    d.yFocalOffset = 0;
-  }
-
-  function normalizeOffsets(d) {
-    if (!d.xFocalOffset || !d.yFocalOffset) {
-      resetOffsets(d);
-    }
-  }
-  */
+   function resetOffsets(d) {
+   d.xFocalOffset = 0;
+   d.yFocalOffset = 0;
+   }
+   
+   function normalizeOffsets(d) {
+   if (!d.xFocalOffset || !d.yFocalOffset) {
+   resetOffsets(d);
+   }
+   }
+   */
   function shuffleNodes(selection) {
     selection
             .transition()
             .duration(detailDisplayDuration)
-            .attr("transform", function(d) {
+            .attr("transform", function (d) {
               var focalData = selectExamined().datum();
               var currDist = Math.sqrt(Math.pow(Math.abs(d.x - focalData.x), 2) + Math.pow(Math.abs(d.y - focalData.y), 2));
               //var circle=selectSymbol(d3.select(this));
@@ -261,7 +295,7 @@ function ConceptDetailViewer(svg) {
   function unshuffleNodes(selection) {
     selection.transition()
             .duration(detailDisplayDuration)
-            .attr("transform", function(d) {
+            .attr("transform", function (d) {
               var translate = "translate(" + (d.y) + "," + (d.x) + ")";
               return translate;
             });
@@ -278,6 +312,20 @@ function ConceptDetailViewer(svg) {
     }
   }
 
+  this.showDetailNow = function (elm, d, i) {
+    var selection = d3.select(elm);
+    selectSymbol(selection).select(function (d) {
+      if (!isExamined(d3.select(this.parentNode))) {
+        d3.select(this.parentNode).call(showDetail);
+      } else {
+        hideDetail();
+      }
+    })
+
+  };
+
+
+
   function hideDetail() {
     // TODO: should hook into some event handler or something?
     //viewer.cancelShowDetail();
@@ -287,10 +335,10 @@ function ConceptDetailViewer(svg) {
     contentDisplay.hide();
   }
 
-  this.setupSelection = function(selection) {
+  this.setupSelection = function (selection) {
     if (conceptDetailEnabled) {
       selectSymbol(selection)
-              .on('contextmenu', function(d) {
+              .on('contextmenu', function (d) {
                 d3.event.preventDefault();
                 if (!isExamined(d3.select(this.parentNode))) {
                   d3.select(this.parentNode).call(showDetail);

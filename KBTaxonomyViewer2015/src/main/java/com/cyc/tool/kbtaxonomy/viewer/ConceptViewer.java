@@ -196,6 +196,13 @@ public interface ConceptViewer {
   public void prepareNearOpenCycTerms();
 
   /**
+   * Find NonCycConcepts that are directly related to near OpenCyc terms
+   * @param nearestOCyc 
+   * @return  a Set of NonCycConcept instances
+   */
+  public Set<NonCycConcept> prepareNonCycConceptsFromNearOpenCycTerms(Collection<KBConcept> nearestOCyc);
+
+  /**
    * Check if W2V space needs to be created and create it if needed
    *
    * @throws IOException
