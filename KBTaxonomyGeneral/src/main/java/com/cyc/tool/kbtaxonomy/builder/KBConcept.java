@@ -348,6 +348,8 @@ public abstract class KBConcept implements JSONizable, D3JSONizable, Comparable<
       script = writeGraphStarter("NonCyc Team Concept #" + conceptNo + " " + this, conceptNo, this.getCycL(), 4, 5);
     }
     return "<a href='javascript:;' onclick=\"" + script + "\">" + getName() + "</a>";
+//    return "<a href='javascript:;' onclick=\"" + script + "\">" + getCycL()+ "</a>";
+
   }
 
   /**
@@ -444,7 +446,11 @@ public abstract class KBConcept implements JSONizable, D3JSONizable, Comparable<
    * @return HTML for Taxonomy Viewer
    */
   public String toSelectedAnchor() {
-    return "<a class=\"selectedTerm\" href='javascript:;' onclick='handleClickedConceptAnchor(\"" + getRef() + "\");'>" + getName() + "</a>";
+//    return "<a class=\"selectedTerm\" href='javascript:;' onclick='handleClickedConceptAnchor(\"" + getRef() + "\");'>" + getName() + "</a>";
+    return "<a class=\"selectedTerm\" href='javascript:;' onclick=\""
+            + "collapsibleLinearGraph('" + String.format("%06d", getIndex()) + "','" + getConceptCycL()+ "'," + 4 + "," + 5 + "," + graphMaxDepth + ");\">"
+            + getName()
+            + "</a>";
   }
 
   @Override
@@ -463,7 +469,7 @@ public abstract class KBConcept implements JSONizable, D3JSONizable, Comparable<
    *
    * @return children
    */
-  protected abstract Set<KBConcept> getChildren();
+  public abstract Set<KBConcept> getChildren();
 
   /**
    *

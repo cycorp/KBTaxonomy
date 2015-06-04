@@ -228,7 +228,7 @@ public class OpenCycConcept extends KBConcept {
   }
 
   @Override
-  protected Set<KBConcept> getChildren() {
+  public Set<KBConcept> getChildren() {
 //   maybeExpand();
     return children;
   }
