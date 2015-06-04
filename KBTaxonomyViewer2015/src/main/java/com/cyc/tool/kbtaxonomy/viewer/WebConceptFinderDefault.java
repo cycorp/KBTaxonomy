@@ -54,7 +54,7 @@ public class WebConceptFinderDefault extends NanoHTTPD {
   private static int port = 8081;
 //  private static int port = 8082;
 
-  private static final String version = "1.0";
+  private static final String version = "1.1";
 
   private String graphShape;
 
@@ -119,6 +119,16 @@ public class WebConceptFinderDefault extends NanoHTTPD {
     final WebParams params = new WebParams(session.getParms());
 
     /* Process form inputs */
+    if (webParams.get("searchSelect") != null) {
+     if ("nearestterms".equals(webParams.get("searchSelect"))) {
+       clearLists();
+       oViewer.setNearestOCycQuery(webParams.get("inputText"));
+     } else {
+       clearLists();
+       oViewer.getSelectedOCycConceptsFromParameters(webParams.get("inputText"));
+     }
+    }
+    
     if (webParams.get("childData") != null) {
       String id = webParams.get("childData");
       String heightStr = webParams.get("height");
@@ -142,21 +152,21 @@ public class WebConceptFinderDefault extends NanoHTTPD {
       }
     }
 
-    if (webParams.get("terms") != null) {
-      oViewer.getSelectedConceptsFromParameters(webParams.get("terms"));
-    }
+//    if (webParams.get("terms") != null) {
+//      oViewer.getSelectedConceptsFromParameters(webParams.get("terms"));
+//    }
 
-    if (webParams.get(
-            "searchterms") != null) {
-      clearLists();
-      oViewer.getSelectedOCycConceptsFromParameters(webParams.get("searchterms"));
-    }
-
-    if (webParams.get(
-            "nearestterms") != null) {
-      clearLists();
-      oViewer.setNearestOCycQuery(webParams.get("nearestterms"));
-    }
+//    if (webParams.get(
+//            "searchterms") != null) {
+//      clearLists();
+//      oViewer.getSelectedOCycConceptsFromParameters(webParams.get("searchterms"));
+//    }
+//
+//    if (webParams.get(
+//            "nearestterms") != null) {
+//      clearLists();
+//      oViewer.setNearestOCycQuery(webParams.get("nearestterms"));
+//    }
 
     if (webParams.get(
             "graphShape") != null) {
@@ -172,9 +182,12 @@ public class WebConceptFinderDefault extends NanoHTTPD {
 
     page = oViewer.getPagePrologue(params, version);
     page += "<div id='debug'> </div>\n\n\n";
-    page += "Search for: ";
-    page = oViewer.addNearestTermSearchForm(page);
-    page = oViewer.addConceptSearchForm(page);
+    
+    page = oViewer.addSearchSelectForm(page);
+    
+//    page += "Search for: ";
+//    page = oViewer.addNearestTermSearchForm(page);
+//    page = oViewer.addConceptSearchForm(page);
 
     Set<NonCycConcept> conceptsToGraph = new HashSet<>();
 

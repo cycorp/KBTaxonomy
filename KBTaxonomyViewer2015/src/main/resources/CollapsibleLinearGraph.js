@@ -6,6 +6,8 @@
  * rather than opening a new graph.
  */
 
+var graphViewer = {
+};
 
 function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepthC) {
   var minGraphHeight = 550;
@@ -15,7 +17,10 @@ function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepth
           baseH = (widthC + 3) * conceptH;
   var width = baseW - margin.left - margin.right,
           height = baseH - margin.top - margin.bottom;
-  if (height < minGraphHeight) { height = minGraphHeight };
+  if (height < minGraphHeight) {
+    height = minGraphHeight
+  }
+  ;
 
   var div = d3.select("#concept" + conceptNo).style("display", "inherit").append("div").attr("style", "position:relative");
   var legendContainer = div.append("div")
@@ -111,6 +116,23 @@ function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepth
       }
       function setupNodes(selection, dir) {
         var direction = dir;
+
+        selection.filter(
+                function (d) {
+                  if (d.type !== 'nonCycTeamConcept') {
+                    return true;
+                  }
+                })
+                .on('contextmenu', d3.contextMenu(graphViewer.menuOpenCyc));
+        
+//        selection.filter(
+//                function (d) {
+//                  if (d.type === 'nonCycTeamConcept') {
+//                    return true;
+//                  }
+//                })
+//                .on('contextmenu', d3.contextMenu(graphViewer.menuNonCyc));
+
         selection.append("circle")
                 .attr("r", function (d) {
                   return d.activeconcept === true ? 6.5 : 5.5;
@@ -131,7 +153,7 @@ function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepth
                                     .attr('class', 'addedTerm')
                                     .attr('conceptid', d.displayedConceptID)
                                     .attr('onclick', 'handleClickedSelectedConceptSpan("' + d.displayedConceptID + '");')
-                                    .text('' + d.name+ ' ');
+                                    .text('' + d.name + ' ');
                             d3.select(this).style('fill', 'green').attr('r', 6.5);
                           } else if (d3.event.ctrlKey) {
                             if (d.displayedConceptID !== null
@@ -160,7 +182,6 @@ function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepth
                 .text(function (d) {
                   return d.name;
                 });
-
         selection.append("text")
                 .attr("dx", function (d) {
                   return d.isParent ? -8 : 8;
@@ -181,7 +202,7 @@ function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepth
                           return d.type === 'nonCycTeamConcept' ? 'normal' : 'italic';
                         });
 
-        detailViewer.setupSelection(selection);
+//                detailViewer.setupSelection(selection);
       } // setupNodes
 
       function update(source, direction) {
@@ -205,7 +226,7 @@ function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepth
         trees["child"].size([newHeight, trees["child"].size()[1]]);
         if (trees["parent"]) {
           childCount(0, roots['parent']);
-          var newHeight = d3.max(levelWidth) * 25;  
+          var newHeight = d3.max(levelWidth) * 25;
           trees["parent"].size([newHeight, trees["parent"].size()[1]]);
         }
 
@@ -219,6 +240,7 @@ function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepth
             d.y = (d.depth * 180);
           }
         });
+
 
         // Update the nodes…
         var node = svg.selectAll("g.node." + dir)
@@ -388,6 +410,56 @@ function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepth
       }
 
       d3.select(self.frameElement).style("height", height + "px");
+
+      function expandOrCollapseTrees(d) {
+        if (d.children) {
+          d.children = null;
+          update(d, direction);
+        } else {
+          d3.json("?childData=" + d.name + "&direction=" + ((d.isParent) ? "up" : "down"), function (err, data) {
+            d.children = data.children;
+            update(d, d.isParent ? "parent" : "child");
+          });
+        }
+      }
+
+      graphViewer.menuOpenCyc = [
+        {
+          title: 'Expand/Collapse [left click]',
+          action: function (elm, d, i) {
+            console.log('Expand or collapse from this node');
+            expandOrCollapseTrees(d);
+          }
+        },
+        {
+          title: 'Refocus [shift+click]',
+          action: function (elm, d, i) {
+            console.log('Refocus on this node');
+            refocusTrees(d);
+          }
+        },
+        {
+          title: 'Details',
+          action: function (elm, d, i) {
+            console.log('Show more information for this node');
+            detailViewer.showDetailNow(elm, d, i);
+          }
+        }
+      ]
+
+      graphViewer.menuNonCyc = [
+        {
+          title: 'Add/Remove from XML Query'
+        },
+        {
+          title: 'Details (where available)',
+          action: function (elm, d, i) {
+            console.log('Show more information for this node');
+            detailViewer.showDetailNow(elm, d, i);
+          }
+        }
+      ]
+
     });
   }
 }

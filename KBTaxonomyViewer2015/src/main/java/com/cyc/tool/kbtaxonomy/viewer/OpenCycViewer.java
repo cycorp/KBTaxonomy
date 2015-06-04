@@ -97,9 +97,27 @@ public class OpenCycViewer implements ConceptViewer {
   }
 
   @Override
+  public String addOptionsSelectForm(String page) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
   public String addQuerySearchForm(String page) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
+
+  @Override
+  public String addSearchSelectForm(String page) {
+    page += "<select form='searchSelectorForm' name='searchSelect'>\n";
+    page += "<option value='nearestterms' title='Search for nearest OpenCyc concepts in a Word2Vec space'>Nearby Term Search</option>\n";
+    page += "<option value='searchterms' title='Perform a lexical search to find OpenCyc concepts'>Lexical Match Search</option>\n";
+    page += "</select>\n";
+    page += "<form action'?' method='get' id='searchSelectorForm'>\n";
+    page += "<input type='text' name='inputText'><input type='submit' >\n";
+    page += "</form>\n";
+    return page;
+  }
+  
 
   @Override
   public String addXMLLoadForm(String page) {
@@ -119,12 +137,22 @@ public class OpenCycViewer implements ConceptViewer {
   }
 
   @Override
+  public String getFileN() {
+    throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
   public InvertedIndex getIndex() {
     return oCycIndex;
   }
 
   @Override
   public Set<NonCycConcept> getLastFileConcepts() {
+    throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public String getLastSaveF() {
     throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
   }
 
@@ -144,6 +172,11 @@ public class OpenCycViewer implements ConceptViewer {
   }
 
   @Override
+  public String getPageEpilogue(WebParams params, String page) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
   public String getPageFileList(String page) {
     throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
   }
@@ -151,7 +184,11 @@ public class OpenCycViewer implements ConceptViewer {
   @Override
   public String getPageOpenCycList(String page, Collection<KBConcept> found) {
     page += "<hr><div style=\"background-color: #f5eeff;\">\n" + "<h2>OpenCyc Concepts</h2>\n";
-    page += found.stream().filter((KBConcept v) -> v instanceof OpenCycConcept).map((KBConcept v) -> (OpenCycViewer.nonGraphingConcepts.contains(v.getCycL()) ? v.getNameUnclick() : v.toAnchor())).collect(Collectors.joining(", \n")) + "<hr></div>";
+    page += found.
+            stream().
+            filter((KBConcept v) -> v instanceof OpenCycConcept).
+            map((KBConcept v) -> (OpenCycViewer.nonGraphingConcepts.contains(v.getCycL()) ? v.getNameUnclick() : v.toAnchor())).
+            collect(Collectors.joining(", \n")) + "<hr></div>";
     return page;
   }
 
@@ -165,7 +202,7 @@ public class OpenCycViewer implements ConceptViewer {
 //    final String conceptDetailEnabledParam = params.serialize().getConceptDetailEnabled(true);
     page += "</head>\n"
             + "<body><h1>OpenCyc Concepts Search</h1>\n"
-            + "Version " + version + "\n";
+            + "Version " + version + "<br>";
     return page;
   }
 
@@ -266,6 +303,11 @@ public class OpenCycViewer implements ConceptViewer {
               .getName()).log(Level.SEVERE, null, ex);
     }
     
+  }
+
+  @Override
+  public Set<NonCycConcept> prepareNonCycConceptsFromNearOpenCycTerms(Collection<KBConcept> nearestOCyc) {
+    throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
   }
   
   @Override

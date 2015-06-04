@@ -48,7 +48,11 @@ public interface ConceptViewer {
    */
   public String addNearestTermSearchForm(String page);
 
+  public String addOptionsSelectForm(String page);
+
   public String addQuerySearchForm(String page);
+
+  public String addSearchSelectForm(String page);
   
   /**
    *
@@ -80,6 +84,16 @@ public interface ConceptViewer {
    * @return lastFileConcepts
    */
   public Set<NonCycConcept> getLastFileConcepts();
+
+  /**
+   * @return  lastSaveF
+   */
+  public String getLastSaveF();
+  
+  /**
+   * @return fileN
+   */
+  public String getFileN();
   
   /**
    *
@@ -98,6 +112,8 @@ public interface ConceptViewer {
    * @param query
    */
   public void setNearestOCycQuery(String query);
+
+  public String getPageEpilogue(WebParams params, String page);
 
   /**
    *
@@ -184,6 +200,13 @@ public interface ConceptViewer {
    *
    */
   public void prepareNearOpenCycTerms();
+
+  /**
+   * Find NonCycConcepts that are directly related to near OpenCyc terms
+   * @param nearestOCyc 
+   * @return  a Set of NonCycConcept instances
+   */
+  public Set<NonCycConcept> prepareNonCycConceptsFromNearOpenCycTerms(Collection<KBConcept> nearestOCyc);
 
   /**
    * Check if W2V space needs to be created and create it if needed
