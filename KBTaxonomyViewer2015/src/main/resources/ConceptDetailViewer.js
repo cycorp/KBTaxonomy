@@ -317,9 +317,10 @@ function ConceptDetailViewer(svg) {
     selectSymbol(selection).select(function (d) {
       if (!isExamined(d3.select(this.parentNode))) {
         d3.select(this.parentNode).call(showDetail);
-      } else {
-        hideDetail();
-      }
+      } 
+//      else {
+//        hideDetail();
+//      }
     })
 
   };

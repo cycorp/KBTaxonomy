@@ -48,7 +48,11 @@ public interface ConceptViewer {
    */
   public String addNearestTermSearchForm(String page);
 
+  public String addOptionsSelectForm(String page);
+
   public String addQuerySearchForm(String page);
+
+  public String addSearchSelectForm(String page);
   
   /**
    *
@@ -108,6 +112,8 @@ public interface ConceptViewer {
    * @param query
    */
   public void setNearestOCycQuery(String query);
+
+  public String getPageEpilogue(WebParams params, String page);
 
   /**
    *

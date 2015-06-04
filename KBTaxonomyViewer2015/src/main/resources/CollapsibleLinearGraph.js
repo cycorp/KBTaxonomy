@@ -6,6 +6,8 @@
  * rather than opening a new graph.
  */
 
+var graphViewer = {
+};
 
 function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepthC) {
   var minGraphHeight = 550;
@@ -121,7 +123,15 @@ function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepth
                     return true;
                   }
                 })
-                .on('contextmenu', d3.contextMenu(menuOpenCyc));
+                .on('contextmenu', d3.contextMenu(graphViewer.menuOpenCyc));
+        
+//        selection.filter(
+//                function (d) {
+//                  if (d.type === 'nonCycTeamConcept') {
+//                    return true;
+//                  }
+//                })
+//                .on('contextmenu', d3.contextMenu(graphViewer.menuNonCyc));
 
         selection.append("circle")
                 .attr("r", function (d) {
@@ -230,6 +240,7 @@ function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepth
             d.y = (d.depth * 180);
           }
         });
+
 
         // Update the nodes…
         var node = svg.selectAll("g.node." + dir)
@@ -412,26 +423,39 @@ function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepth
         }
       }
 
-      var menuOpenCyc = [
+      graphViewer.menuOpenCyc = [
         {
-          title: 'Expand/Collapse',
+          title: 'Expand/Collapse [left click]',
           action: function (elm, d, i) {
             console.log('Expand or collapse from this node');
             expandOrCollapseTrees(d);
           }
         },
         {
-          title: 'Refocus',
+          title: 'Refocus [shift+click]',
           action: function (elm, d, i) {
             console.log('Refocus on this node');
             refocusTrees(d);
           }
         },
         {
-          title: 'More Information',
-          action: function(elm, d, i) {
-           console.log('Show more information for this node');
-           detailViewer.showDetailNow(elm, d, i);
+          title: 'Details',
+          action: function (elm, d, i) {
+            console.log('Show more information for this node');
+            detailViewer.showDetailNow(elm, d, i);
+          }
+        }
+      ]
+
+      graphViewer.menuNonCyc = [
+        {
+          title: 'Add/Remove from XML Query'
+        },
+        {
+          title: 'Details (where available)',
+          action: function (elm, d, i) {
+            console.log('Show more information for this node');
+            detailViewer.showDetailNow(elm, d, i);
           }
         }
       ]

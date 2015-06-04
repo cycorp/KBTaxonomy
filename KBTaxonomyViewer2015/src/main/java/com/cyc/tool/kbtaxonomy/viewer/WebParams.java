@@ -67,7 +67,7 @@ public class WebParams {
   public String getTerms() { return parseString(TERMS); }
       
   public boolean isConceptDetailEnabled() {
-    return parseBoolean(CONCEPT_DETAIL_ENABLED, true);
+    return parseBoolean(CONCEPT_DETAIL_ENABLED, false);
   }
   
   public boolean isEmpty(String param) {
