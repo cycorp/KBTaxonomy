@@ -49,8 +49,8 @@ public class JavascriptGraphs {
 //          "http://d3js.org/d3.v3.min.js",
 //          "https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js",
           "https://code.jquery.com/jquery-1.10.2.js",
-          getResourceURI("d3.js/d3.min.js"),
-          getResourceURI("d3-context-menu/d3-context-menu.js"),
+          getResourceURI("d3.min.js"),
+          getResourceURI("d3-context-menu.js"),
           getResourceURI("ConceptDetailViewer.js")
   );
 
@@ -140,7 +140,7 @@ public class JavascriptGraphs {
   
   static String cssLinks() {
     return "<link href=\"" + getResourceURI("ViewerStyles.css") + "\" media=\"all\" rel=\"stylesheet\" />\n" +
-            "<link href=\"" + getResourceURI("d3-context-menu/d3-context-menu.css") + "\" media=\"all\" rel=\"stylesheet\" />\n";
+            "<link href=\"" + getResourceURI("d3-context-menu.css") + "\" media=\"all\" rel=\"stylesheet\" />\n";
   }
   
   static String readGraphJS(String graphType) {

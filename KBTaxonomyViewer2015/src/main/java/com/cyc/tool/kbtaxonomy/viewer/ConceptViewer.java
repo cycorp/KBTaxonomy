@@ -201,8 +201,6 @@ public interface ConceptViewer {
    */
   public void prepareNearOpenCycTerms();
 
-  public Set<NonCycConcept> prepareNonCycConceptsFromNearOpenCycTerms(Collection<KBConcept> nearestOCyc);
-
   /**
    * Find NonCycConcepts that are directly related to near OpenCyc terms
    * @param nearestOCyc 

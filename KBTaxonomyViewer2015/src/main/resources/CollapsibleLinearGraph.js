@@ -124,7 +124,7 @@ function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepth
                   }
                 })
                 .on('contextmenu', d3.contextMenu(graphViewer.menuOpenCyc));
-        
+
 //        selection.filter(
 //                function (d) {
 //                  if (d.type === 'nonCycTeamConcept') {
@@ -184,11 +184,29 @@ function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepth
                 });
         selection.append("text")
                 .attr("dx", function (d) {
-                  return d.isParent ? -8 : 8;
+                  // center the label for the root node under the node
+                  if (d.depth === 0) {
+                    return 0;
+                  } else if (d.isParent) {
+                    return -8;
+                  } else {
+                    return 8;
+                  }
+//                  return d.isParent ? -8 : 8;
                 })
-                .attr("dy", 3)
+//                .attr("dy", 3)
+                .attr("dy", function (d) {
+                  return (d.depth === 0) ? 25 : 3;
+                })
                 .attr("text-anchor", function (d) {
-                  return d.isParent ? "end" : "start";
+//                  return d.isParent ? "end" : "start";
+                  if (d.depth === 0) {
+                    return "middle";
+                  } else if (d.isParent) {
+                    return "end";
+                  } else {
+                    return "start";
+                  }
                 })
                 .text(function (d) {
                   return (!d.isParent || d.activeconcept !== false) ? d.name : "";
@@ -201,7 +219,6 @@ function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepth
                         function (d) {
                           return d.type === 'nonCycTeamConcept' ? 'normal' : 'italic';
                         });
-
 //                detailViewer.setupSelection(selection);
       } // setupNodes
 
