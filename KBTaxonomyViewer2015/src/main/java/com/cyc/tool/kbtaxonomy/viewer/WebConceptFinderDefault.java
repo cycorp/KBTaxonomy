@@ -214,7 +214,8 @@ public class WebConceptFinderDefault extends NanoHTTPD {
           String ref = v.getRef();
           page += "<div class=\"cgraph\" id=\"" + ref + "\" style=\"display:none;\"><hr>";
           if (v instanceof OpenCycConcept) {
-            page += "\n\n" + v.toCloseButton() + ": Concept: <i>" + v.getCycL() + "</i><br>" + v.getName();
+//            page += "\n\n" + v.toCloseButton() + ": Concept: <i>" + v.getCycL() + "</i><br>" + v.getName();
+            page += "\n\n" + v.toCloseButton();// + ": Concept: <i>" + v.getCycL() + "</i><br>" + v.getName();
             if (OpenCycViewer.nonGraphingConcepts.contains(v.getCycL())) {
               page += "<b>Skipping graph </b>";
             } else {

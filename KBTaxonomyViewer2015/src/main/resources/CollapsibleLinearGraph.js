@@ -442,21 +442,21 @@ function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepth
 
       graphViewer.menuOpenCyc = [
         {
-          title: 'Expand/Collapse [left click]',
+          title: '<span class="tooltip" title="Expand or collapse this node"><span class="action">Expand/Collapse</span><span class="shortcut">left click</span></span>',
           action: function (elm, d, i) {
             console.log('Expand or collapse from this node');
             expandOrCollapseTrees(d);
           }
         },
         {
-          title: 'Refocus [shift+click]',
+          title: '<span class="tooltip" title="Draw a new graph with this node as the root"><span class="action">Refocus</span><span class="shortcut">shift+click</span></span>',
           action: function (elm, d, i) {
             console.log('Refocus on this node');
             refocusTrees(d);
           }
         },
         {
-          title: 'Details',
+          title: '<span class="tooltip" title="See more information about this node"><span class="action">Details</span></span>',
           action: function (elm, d, i) {
             console.log('Show more information for this node');
             detailViewer.showDetailNow(elm, d, i);
@@ -466,10 +466,10 @@ function collapsibleLinearGraph(conceptNo, conceptName, depthC, widthC, maxDepth
 
       graphViewer.menuNonCyc = [
         {
-          title: 'Add/Remove from XML Query'
+          title: '<span class="action">Add/Remove from XML Query</span>'
         },
         {
-          title: 'Details (where available)',
+          title: '<span class="action">Details (where available)</span>',
           action: function (elm, d, i) {
             console.log('Show more information for this node');
             detailViewer.showDetailNow(elm, d, i);

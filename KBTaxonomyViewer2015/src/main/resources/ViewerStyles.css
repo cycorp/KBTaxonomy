@@ -8,7 +8,11 @@ svg {
   border-radius: 3px;
 }
 
-.node circle {  fill: #fff;  stroke: steelblue;  stroke-width: 1.5px;}.node {  font: 12px sans-serif;}.link {  fill: none;  stroke: #ccc;  stroke-width: 1.5px;}#concepts {  font: 14px sans-serif;}.addedTerm {
+.node circle {  fill: #fff;  stroke: steelblue;  stroke-width: 1.5px;}
+.node {  font: 12px sans-serif;}
+.link {  fill: none;  stroke: #eee;  stroke-width: 1.5px;}
+#concepts {  font: 14px sans-serif;}
+.addedTerm {
   font-weight: 16px sans-serif;
   color: green;
 }
@@ -62,5 +66,20 @@ a:hover {
 }
 
 form {
-    display: inline-block; //Or display: inline; 
+  display: inline-block; //Or display: inline; 
+}
+
+.d3-context-menu li .tooltip{
+  display:flex;
+  justify-content: space-between;
+}
+
+.d3-context-menu .shortcut {
+  font-style: italic;
+  color: #777;
+  padding-left: 2em;
+}
+
+.d3-context-menu li:hover .shortcut {
+  color: #ddd;
 }
