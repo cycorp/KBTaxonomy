@@ -22,6 +22,7 @@ package com.cyc.tool.kbtaxonomy.viewer;
 
 import com.cyc.tool.conceptfinder.ConceptMatch;
 import com.cyc.tool.conceptfinder.ConceptSpace;
+import com.cyc.tool.conceptfinder.Passage;
 import com.cyc.tool.distributedrepresentations.GoogleNewsW2VOpenCycSubspace;
 import com.cyc.tool.distributedrepresentations.Word2VecSpace;
 import com.cyc.tool.owltools.OpenCycContent;
@@ -264,20 +265,22 @@ public class OpenCycViewer implements ConceptViewer {
   public void loadXMLQueryFile(String file) {
     throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
   }
-
-  @Override
-  public void prepareNearOpenCycTerms() {
-    
+  
+  public void prepareNearOpenCycTerms(String queryString) {
     selectedOCycConcepts.clear();
     nearestOCyc.clear();
     Collection added = new HashSet<String>();
+    
     try {
+      Passage passageInstance = new Passage(queryString);
+      
       setUpSpaceIfNeeded();
       List<ConceptMatch> nearTerms = new ArrayList<>();
-      
-      nearTerms = ocycConceptSpace.findNearestNForPosition(nearestOCycQuery, 40, t -> String.join(" | ", ocyc.conceptsFor(t)));
+
+//      nearTerms = ocycConceptSpace.findNearestNForPosition(queryString, 40, t -> String.join(" | ", ocyc.conceptsFor(t)));
+      nearTerms = passageInstance.narrowConceptsForPassage(passageInstance.findConceptsForPassage());
       for (ConceptMatch match : nearTerms) {
-        System.out.println("Match:" + match);
+        System.out.println("Match: " + match);
         Arrays.asList(match.getConcept().split("\\s*\\|\\s*"))
                 .forEach(concept -> {
                   OpenCycContent instance;
@@ -295,14 +298,18 @@ public class OpenCycViewer implements ConceptViewer {
                     }
                   }
                 });
-        
+
       }
-      
-    } catch (OWLOntologyCreationException | IOException | Word2VecSpace.NoWordToVecVectorForTerm ex) {
+
+    } catch (OWLOntologyCreationException | IOException ex) {
       Logger.getLogger(OpenCycViewer.class
               .getName()).log(Level.SEVERE, null, ex);
     }
-    
+  }
+
+  @Override
+  public void prepareNearOpenCycTerms() {
+    prepareNearOpenCycTerms(nearestOCycQuery);
   }
 
   @Override

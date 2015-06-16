@@ -201,6 +201,8 @@ public interface ConceptViewer {
    */
   public void prepareNearOpenCycTerms();
 
+  public void prepareNearOpenCycTerms(String longQueryStr);
+
   /**
    * Find NonCycConcepts that are directly related to near OpenCyc terms
    * @param nearestOCyc 
