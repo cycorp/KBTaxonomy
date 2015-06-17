@@ -81,8 +81,8 @@ public class BioOpenCycViewer extends OpenCycViewer {
   }
   
   @Override
-  public void prepareNearOpenCycTerms() {
-
+  public String prepareNearOpenCycTerms() {
+    String nameForFS = "BioSearch";
     selectedOCycConcepts.clear();
     nearestOCyc.clear();
     Collection added = new HashSet<String>();
@@ -117,7 +117,7 @@ public class BioOpenCycViewer extends OpenCycViewer {
       Logger.getLogger(OpenCycViewer.class
               .getName()).log(Level.SEVERE, null, ex);
     }
-
+return nameForFS;
   }
 
   @Override

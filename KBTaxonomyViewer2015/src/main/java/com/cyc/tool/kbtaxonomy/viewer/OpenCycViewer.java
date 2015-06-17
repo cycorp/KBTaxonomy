@@ -19,7 +19,6 @@ package com.cyc.tool.kbtaxonomy.viewer;
  * limitations under the License.
  * #L%
  */
-
 import com.cyc.tool.conceptfinder.ConceptMatch;
 import com.cyc.tool.conceptfinder.ConceptSpace;
 import com.cyc.tool.conceptfinder.Passage;
@@ -47,8 +46,8 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
 /**
  * <P>
- * OpenCycViewer contains methods for implementing a Taxonomy Viewer with OpenCyc concepts and
- * the GoogleNew W2V space.
+ * OpenCycViewer contains methods for implementing a Taxonomy Viewer with OpenCyc concepts and the
+ * GoogleNew W2V space.
  */
 public class OpenCycViewer implements ConceptViewer {
 
@@ -86,6 +85,11 @@ public class OpenCycViewer implements ConceptViewer {
   }
 
   @Override
+  public void addAllConceptsToXML(Set<NonCycConcept> prepareNonCycConceptsFromNearOpenCycTerms, String nameForFS) {
+    throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
   public String addConceptSearchForm(String page) {
     page += "<form action='?' method='get'>\n" + "  concepts: <input type='text' name='searchterms'><input type=\"submit\" value=\"Submit\">\n" + "</form>\n";
     return page;
@@ -118,7 +122,6 @@ public class OpenCycViewer implements ConceptViewer {
     page += "</form>\n";
     return page;
   }
-  
 
   @Override
   public String addXMLLoadForm(String page) {
@@ -260,20 +263,21 @@ public class OpenCycViewer implements ConceptViewer {
       Logger.getLogger(OpenCycViewer.class.getName()).log(Level.SEVERE, null, ex);
     }
   }
-  
+
   @Override
   public void loadXMLQueryFile(String file) {
     throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
   }
-  
-  public void prepareNearOpenCycTerms(String queryString) {
+
+  public String prepareNearOpenCycTerms(String queryString) {
+    String nameForFS = "";
     selectedOCycConcepts.clear();
     nearestOCyc.clear();
     Collection added = new HashSet<String>();
-    
+
     try {
       Passage passageInstance = new Passage(queryString);
-      
+
       setUpSpaceIfNeeded();
       List<ConceptMatch> nearTerms = new ArrayList<>();
 
@@ -300,23 +304,24 @@ public class OpenCycViewer implements ConceptViewer {
                 });
 
       }
-
+      nameForFS = passageInstance.getShortText();
     } catch (OWLOntologyCreationException | IOException ex) {
       Logger.getLogger(OpenCycViewer.class
               .getName()).log(Level.SEVERE, null, ex);
     }
+    return nameForFS;
   }
 
   @Override
-  public void prepareNearOpenCycTerms() {
-    prepareNearOpenCycTerms(nearestOCycQuery);
+  public String prepareNearOpenCycTerms() {
+    return prepareNearOpenCycTerms(nearestOCycQuery);
   }
 
   @Override
   public Set<NonCycConcept> prepareNonCycConceptsFromNearOpenCycTerms(Collection<KBConcept> nearestOCyc) {
     throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
   }
-  
+
   @Override
   public void setUpSpaceIfNeeded() throws IOException, OWLOntologyCreationException {
     if (ocyc == null) {
@@ -327,5 +332,5 @@ public class OpenCycViewer implements ConceptViewer {
       ocycConceptSpace = new ConceptSpace(GoogleNewsW2VOpenCycSubspace.get());
     }
   }
-  
+
 }

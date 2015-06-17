@@ -33,6 +33,9 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
  *
  */
 public interface ConceptViewer {
+
+  public void addAllConceptsToXML(Set<NonCycConcept> prepareNonCycConceptsFromNearOpenCycTerms,
+          String nameForFS);
   
   /**
    *
@@ -199,9 +202,9 @@ public interface ConceptViewer {
    * Analyze matches to W2V space to find OpenCyc concepts
    *
    */
-  public void prepareNearOpenCycTerms();
+  public String prepareNearOpenCycTerms();
 
-  public void prepareNearOpenCycTerms(String longQueryStr);
+  public String prepareNearOpenCycTerms(String longQueryStr);
 
   /**
    * Find NonCycConcepts that are directly related to near OpenCyc terms
