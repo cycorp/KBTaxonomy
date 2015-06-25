@@ -23,7 +23,6 @@ import com.cyc.tool.conceptfinder.ConceptMatch;
 import com.cyc.tool.conceptfinder.ConceptSpace;
 import com.cyc.tool.conceptfinder.Passage;
 import com.cyc.tool.distributedrepresentations.GoogleNewsW2VOpenCycSubspace;
-import com.cyc.tool.distributedrepresentations.Word2VecSpace;
 import com.cyc.tool.owltools.OpenCycContent;
 import com.cyc.tool.owltools.OpenCycOwl;
 import com.cyc.tool.kbtaxonomy.builder.NonCycConcept;
@@ -33,6 +32,7 @@ import com.cyc.tool.kbtaxonomy.builder.TaxonomyFromOpenCyc;
 import com.cyc.tool.kbtaxonomy.builder.KBConcept;
 import static com.cyc.tool.kbtaxonomy.viewer.JavascriptGraphs.jsPackages;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -270,6 +270,7 @@ public class OpenCycViewer implements ConceptViewer {
   }
 
   public String prepareNearOpenCycTerms(String queryString) {
+    forceGC();
     String nameForFS = "";
     selectedOCycConcepts.clear();
     nearestOCyc.clear();
@@ -309,6 +310,7 @@ public class OpenCycViewer implements ConceptViewer {
       Logger.getLogger(OpenCycViewer.class
               .getName()).log(Level.SEVERE, null, ex);
     }
+    forceGC();
     return nameForFS;
   }
 
@@ -324,13 +326,23 @@ public class OpenCycViewer implements ConceptViewer {
 
   @Override
   public void setUpSpaceIfNeeded() throws IOException, OWLOntologyCreationException {
-    if (ocyc == null) {
-      ocyc = new OpenCycOwl();
-    }
-    if (ocycConceptSpace == null) {
+//    if (ocyc == null) {
+//      ocyc = new OpenCycOwl();
+//    }
+//    if (ocycConceptSpace == null) {
+//
+//      ocycConceptSpace = new ConceptSpace(GoogleNewsW2VOpenCycSubspace.get());
+//    }
+  }
 
-      ocycConceptSpace = new ConceptSpace(GoogleNewsW2VOpenCycSubspace.get());
+  private void forceGC() {
+    System.out.println("Force garbage collection now.");
+    Object obj = new Object();
+    WeakReference ref = new WeakReference<>(obj);
+    obj = null;
+    while (ref.get() != null) {
+      System.gc();
     }
   }
 
-    }
+}
